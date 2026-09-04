@@ -28,35 +28,10 @@ public class RegistroNoel {
                     listarProductos(productos);
                     break;
                 case 2:
-                    input.nextLine();
-                    System.out.println("Ingrese el nombre del producto: ");
-                    String nombreProducto = input.nextLine();
-
-                    if (buscarProducto(productos, nombreProducto)) {
-                        System.out.println("El producto " + nombreProducto + " Sí está en el inventario");
-                    } else {
-                        System.out.println("El producto " + nombreProducto + " No esta en el inventario");
-                    }
+                    buscarProducto(input, productos);
                     break;
                 case 3:
-                    input.nextLine();
-                    System.out.println("Ingrese el nombre del nuevo producto: ");
-                    String nuevoProducto = input.nextLine();
-                    boolean productoGuardado = false;
-
-                    for (int i = 0; i < productos.length; i++) {
-                        if (productos[i] == null) {
-                            productos[i] = nuevoProducto;
-                            productoGuardado = true;
-                            System.out.println("El producto " + nuevoProducto + " agregado en la posición: " + i);
-                            break;
-                        }
-                    }
-
-                    if (!productoGuardado) {
-                        System.out.println("El inventario esta lleno, no es posible guardar más productos");
-                    }
-
+                    agregarProducto(input, productos);
                     break;
                 case 4:
                     System.out.println("Saliendo del ménu...");
@@ -72,7 +47,15 @@ public class RegistroNoel {
         input.close();
     }
 
-    public static boolean buscarProducto(String[] productos, String nombreProducto) {
+    public static void listarProductos(String[] productos) {
+        for (String producto : productos) {
+            if (producto != null) {
+                System.out.println("- " + producto);
+            }
+        }
+    }
+
+    public static boolean validarProducto(String[] productos, String nombreProducto) {
         for (String producto : productos) {
             if (producto != null && producto.equalsIgnoreCase(nombreProducto)) {
                 return true;
@@ -81,11 +64,37 @@ public class RegistroNoel {
         return false;
     }
 
-    public static void listarProductos(String[] productos) {
-        for (String producto : productos) {
-            if (producto != null) {
-                System.out.println("- " + producto);
+    public static void buscarProducto(Scanner input, String[] productos) {
+        input.nextLine();
+        System.out.println("Ingrese el nombre del producto: ");
+        String nombreProducto = input.nextLine();
+
+        if (validarProducto(productos, nombreProducto)) {
+            System.out.println("El producto " + nombreProducto + " Sí! esta en el inventario");
+        } else {
+            System.out.println("El producto " + nombreProducto + " No! esta en el inventario");
+        }
+    }
+
+    public static boolean validarPosicion(String[] productos, String nombreProducto) {
+        for (int i = 0; i < productos.length; i++) {
+            if (productos[i] == null) {
+                productos[i] = nombreProducto;
+                return true;
             }
+        }
+        return false;
+    }
+
+    public static void agregarProducto(Scanner input, String[] productos) {
+        input.nextLine();
+        System.out.println("Ingrese el nombre del nuevo producto: ");
+        String nombreProducto = input.nextLine();
+
+        if (validarPosicion(productos, nombreProducto)) {
+            System.out.println("El producto " + nombreProducto + " fue agregado");
+        } else {
+            System.out.println("El inventario esta lleno, no es posible guardar más productos");
         }
     }
 }
